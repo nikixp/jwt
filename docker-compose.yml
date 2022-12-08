@@ -1,0 +1,16 @@
+version: "1"
+services:
+  app-backend:
+    restart: always
+    image: app-backend
+    container_name: app-backend
+    ports:
+      - 8080:8080
+  app-frontend:
+    restart: always
+    image: app-frontend
+    container_name: app-frontend
+    ports:
+      - 80:80
+    depends_on:
+      - app-backend
