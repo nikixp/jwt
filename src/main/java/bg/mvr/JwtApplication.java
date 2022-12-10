@@ -14,9 +14,7 @@ public class JwtApplication {
 
     @Bean
     public CommandLineRunner runner() {
-        return args -> {
-            System.out.println("app runner...");
-        };
+        return args -> System.out.println("app runner...");
     }
 
 }
