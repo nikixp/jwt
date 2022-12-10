@@ -50,8 +50,6 @@ import java.util.UUID;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private RSAKey rsaKey;
-
     public SecurityConfig() {
     }
 
@@ -92,8 +90,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource() {
-        rsaKey = generateRsa();
+    public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey) {
         JWKSet jwkSet = new JWKSet(rsaKey);
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
@@ -104,7 +101,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder() throws JOSEException {
+    JwtDecoder jwtDecoder(RSAKey rsaKey) throws JOSEException {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     }
 
@@ -119,7 +116,8 @@ public class SecurityConfig {
     }
 
 
-    private RSAKey generateRsa() {
+    @Bean
+    public RSAKey generateRsa() {
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
